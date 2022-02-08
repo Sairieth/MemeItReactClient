@@ -13,6 +13,17 @@
   }
 }
 
+.brand.logo {
+  position:relative;
+  color:magenta ;  
+  bottom: 2px;
+  margin-right: 5px; 
+}
+.brand {
+  position:relative;
+  color:magenta ;  
+  margin-right: 5px; 
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
