@@ -13,6 +13,18 @@
   }
 }
 
+.icon.tag{
+  position:relative;
+  color: floralwhite; 
+  bottom: 2px;
+  margin-right: 5px; 
+}
+
+.icon{
+  position:relative;
+  bottom: 3px; 
+}
+
 .brand.logo {
   position:relative;
   color:magenta ;  
