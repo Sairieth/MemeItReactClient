@@ -9,7 +9,7 @@ const NavigationBarFrame = () => {
         switch (role) {
             case "baseUser":
                 console.log("Base");
-                return <BaseUserNavBar />;
+                return <BaseUserNavBar user={user}/>;
             case "moderator":
                 console.log("Mod");
                 return <ModeratorNavBar />;
