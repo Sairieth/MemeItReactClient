@@ -4,6 +4,7 @@ import NavigationBarFrame from './components/navigationBars/NavigationBarFrame';
 import { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { userContext } from './context/UserProvider';
+import Footer from './components/Footer'
 
 
 
@@ -21,7 +22,10 @@ function App() {
   return (
     <div className="App">
       <NavigationBarFrame />
-      <Button onClick={changeUser}></Button>
+      <div className='tempBackground'>
+      <Button onClick={changeUser}>NavBar switch</Button>
+      </div>
+      <Footer/>
     </div>
   );
 }
