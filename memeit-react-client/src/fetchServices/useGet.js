@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 
 const useGet = (url, token='') => {
-    const [data, SetData] = useState(null);
-    const [isPending, SetIsPending] = useState(true);
-    const [error, SetError] = useState(null);
+    const [data, setData] = useState(null);
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        setTimeout(() => {
             fetch(url, {
-                mode: "cors",
                 method: "GET",
                 headers:{
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 }})
                 .then(res => {
                     if (!res.ok) {
@@ -20,15 +18,14 @@ const useGet = (url, token='') => {
                     return res.json();
                 })
                 .then(data =>{
-                    SetData(data)
-                    SetIsPending(false)
-                    SetError(null);
+                    setData(data);
+                    setIsPending(false);
+                    setError(null);
                 })
                 .catch(err =>{
-                    SetIsPending(false);
-                    SetError(err.message);
+                    setIsPending(false);
+                    setError(err.message);
                 })
-        }, 1000);
     }, [url,token]);
     return {data,isPending,error};
 }
