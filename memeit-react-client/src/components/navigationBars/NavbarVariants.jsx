@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react';
 import '../../App.js';
-import { Container, Navbar, Dropdown, Button } from 'react-bootstrap';
-import { FaGrinSquintTears, FaTags, FaPortrait } from "react-icons/fa"
+import React from 'react';
 import { IconContext } from 'react-icons/lib';
-import { BsPenFill, BsDoorOpenFill, BsDoorClosedFill } from 'react-icons/bs'
-import useGet from '../../fetchServices/useGet'
+import { GiChiliPepper } from "react-icons/gi";
+import { FaTags, FaPortrait } from "react-icons/fa"
+import { Container, Navbar, Dropdown, Button } from 'react-bootstrap';
+import { BsPen, BsDoorOpenFill, BsDoorClosedFill } from 'react-icons/bs'
 
-function buildTagsDropItems(tags, isPending, error) {
+import useGet from '../../fetchServices/useGet'
+import LoginModal from '../authentication/LoginModal.jsx';
+
+function BuildTagsDropItems() {
+  const { data:tags, isPending, error } = useGet('https://localhost:7247/api/tag/get-all');
   return tags !== null && !isPending && error === null ? (tags.map((tag, index) => (
     <Dropdown.Item key={index}>{tag}</Dropdown.Item>
   ))) : <>{error}</>
 }
 
 export const DefaultNavBar = () => {
-  const { data: tags, isPending, error } = useGet('https://localhost:7247/api/Tag/get-all');
+  const [modalShow, setModalShow] = React.useState(false);
 
   return <>
     <Navbar bg="dark" variant="dark" sticky="top">
       <Container fluid className="justify-content-start">
         <Navbar.Brand >
           <IconContext.Provider value={{ size: '1.6em', className: "brand logo" }}>
-            <FaGrinSquintTears />
+            <GiChiliPepper />
           </IconContext.Provider>
           <span className='brand'>MemeIt</span>
         </Navbar.Brand>
@@ -31,35 +35,35 @@ export const DefaultNavBar = () => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {buildTagsDropItems(tags, isPending, error)}
+            {BuildTagsDropItems()}
           </Dropdown.Menu>
         </Dropdown>
       </Container>
       <Container fluid className="justify-content-end">
         <Navbar.Brand variant='dark' as={Button} title='sign up'>
           <IconContext.Provider value={{ size: '1.1em', className: "icon" }}>
-            <BsPenFill />
+            <BsPen />
           </IconContext.Provider>
         </Navbar.Brand>
-        <Navbar.Brand variant='dark' as={Button} title='log in'>
-          <IconContext.Provider value={{ size: '1.1em', className: "icon" }}>
+        <Navbar.Brand variant='dark' as={Button } onClick={() => setModalShow(true)} title='log in'>
+          <IconContext.Provider value={{ size: '1.1em', color: 'lightgreen', className: "icon" }}>
             <BsDoorOpenFill />
           </IconContext.Provider>
         </Navbar.Brand>
       </Container>
     </Navbar>
+    <LoginModal show={modalShow}
+        onHide={() => setModalShow(false)}/>
   </>;
 };
 
-export const BaseUserNavBar = ({user}) => {
-  const { data: tags, isPending, error } = useGet('https://localhost:7247/api/Tag/get-all');
-
+export const BaseUserNavBar = ({ user }) => {
   return <>
     <Navbar bg="dark" variant="dark" sticky="top">
       <Container fluid className="justify-content-start">
         <Navbar.Brand >
           <IconContext.Provider value={{ size: '1.6em', className: "brand logo" }}>
-            <FaGrinSquintTears />
+            <GiChiliPepper />
           </IconContext.Provider>
           <span className='brand'>MemeIt</span>
         </Navbar.Brand>
@@ -70,7 +74,7 @@ export const BaseUserNavBar = ({user}) => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {buildTagsDropItems(tags, isPending, error)}
+            {BuildTagsDropItems()}
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
@@ -86,7 +90,7 @@ export const BaseUserNavBar = ({user}) => {
       </Container>
       <Container fluid className="justify-content-end">
         <Navbar.Brand variant='dark' as={Button} title='log out'>
-          <IconContext.Provider value={{ size: '1.1em', className: "icon" }}>
+          <IconContext.Provider value={{ size: '1.1em', color: 'red', className: "icon" }}>
             <BsDoorClosedFill />
           </IconContext.Provider>
         </Navbar.Brand>
@@ -96,14 +100,12 @@ export const BaseUserNavBar = ({user}) => {
 };
 
 export const ModeratorNavBar = () => {
-  const { data: tags, isPending, error } = useGet('https://localhost:7247/api/Tag/get-all');
-
   return <>
     <Navbar bg="dark" variant="dark" sticky="top">
       <Container fluid className="justify-content-start">
         <Navbar.Brand >
           <IconContext.Provider value={{ size: '1.6em', className: "brand logo" }}>
-            <FaGrinSquintTears />
+            <GiChiliPepper />
           </IconContext.Provider>
           <span className='brand'>MemeIt</span>
         </Navbar.Brand>
@@ -114,13 +116,13 @@ export const ModeratorNavBar = () => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {buildTagsDropItems(tags, isPending, error)}
+            {BuildTagsDropItems()}
           </Dropdown.Menu>
         </Dropdown>
       </Container>
       <Container fluid className="justify-content-end">
         <Navbar.Brand variant='dark' as={Button} title='log out'>
-          <IconContext.Provider value={{ size: '1.1em', className: "icon" }}>
+          <IconContext.Provider value={{ size: '1.1em', color: 'red', className: "icon" }}>
             <BsDoorClosedFill />
           </IconContext.Provider>
         </Navbar.Brand>
