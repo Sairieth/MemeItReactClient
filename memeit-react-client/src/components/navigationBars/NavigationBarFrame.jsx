@@ -1,23 +1,32 @@
 import { DefaultNavBar, BaseUserNavBar, ModeratorNavBar } from './NavbarVariants';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { userContext } from '../../context/UserProvider';
+import Cookies from 'universal-cookie';
 
 const NavigationBarFrame = () => {
-    const { user } = useContext(userContext);
+    const { user, setUser } = useContext(userContext);
 
-    function chooseBar(role) {
+
+    const onLogout = useCallback(() => {
+        setUser(null);
+        removeCookie();
+    },[setUser])
+
+    function removeCookie() {
+        const cookies = new Cookies();
+        cookies.remove("JWT", { domain: '', path: '/' });
+    }
+
+    const chooseBar = useCallback((role) => {
         switch (role) {
             case "baseUser":
-                console.log("Base");
-                return <BaseUserNavBar user={user}/>;
+                return <BaseUserNavBar user={user} onLogout={() => onLogout()} />;
             case "moderator":
-                console.log("Mod");
-                return <ModeratorNavBar />;
+                return <ModeratorNavBar user={user} onLogout={() => onLogout()} />;
             default:
-                console.log("Default");
                 return <DefaultNavBar />;
         }
-    }
+    }, [user, onLogout]);
 
     return <>
         {chooseBar(user?.role)}
