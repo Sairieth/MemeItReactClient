@@ -1,20 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 
-const usePost = (url,dataToSend, token = '') => {
-    const [data, setData] = useState(null);
-    const [isPending, setIsPending] = useState(true);
-    const [error, setError] = useState(null);
+const usePost = (url, token = '') => {
+    const [postState, setPostState] = useState({
+        data: null,
+        isPostPending: false,
+        postError: null
+    })
 
-    useEffect(() => {
-        setTimeout(() => {
+    // utánanézni -> useCallback()
+    const request = useCallback((dataToSend) => {
+
+        if (dataToSend !== null) {
+            setPostState((prevState) => {
+                return {
+                    ...prevState,
+                    isPostPending: true
+                }
+            });
             fetch(url, {
-                method: "POST",
-                credentials:'include',
+                method: 'POST',
+                credentials: 'same-origin',
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body:JSON.stringify(dataToSend)
+                body: JSON.stringify(dataToSend)
             })
                 .then(res => {
                     if (!res.ok) {
@@ -23,16 +33,21 @@ const usePost = (url,dataToSend, token = '') => {
                     return res.json();
                 })
                 .then(data => {
-                    setData(data)
-                    setIsPending(false)
-                    setError(null);
+                    setPostState({
+                        data: data,
+                        isPostPending: false,
+                        postError: null
+                    })
                 })
                 .catch(err => {
-                    setIsPending(false);
-                    setError(err.message);
+                    setPostState({
+                        data: null,
+                        isPostPending: false,
+                        postError: err.name
+                    })
                 })
-        }, 1000);
-    }, [url, token, dataToSend]);
-    return { data, isPending, error };
+        };
+    }, [url, token])
+    return { ...postState, request };
 }
 export default usePost;
