@@ -1,21 +1,19 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import NavigationBarFrame from './components/navigationBars/NavigationBarFrame';
-import { useContext } from 'react';
-import { userContext } from './context/UserProvider';
+import { useState } from 'react';
 import Footer from './components/Footer'
-
+import MemesByTag from './body/MemesByTag';
 
 
 
 function App() {
-  const { user } = useContext(userContext);
+  const [tag,setTag] = useState('Funny')
 
   return (
     <div className="App">
-      <NavigationBarFrame user={user} />
-      <div className='tempBackground'>
-      </div>
+      <NavigationBarFrame tagSetter={(tag)=> setTag(tag)} />
+      <MemesByTag tag={tag} />
       <Footer/>
     </div>
   );

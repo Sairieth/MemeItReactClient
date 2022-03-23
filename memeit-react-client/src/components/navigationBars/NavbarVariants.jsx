@@ -5,18 +5,12 @@ import { GiChiliPepper } from "react-icons/gi";
 import { FaTags, FaPortrait } from "react-icons/fa"
 import { Container, Navbar, Dropdown, Button } from 'react-bootstrap';
 import { BsPen, BsDoorOpenFill, BsDoorClosedFill } from 'react-icons/bs'
-import useGet from '../../fetchServices/useGet'
 import LoginModal from '../authentication/LoginModal.jsx';
 import SignUpModal from '../authentication/SignUpModal.jsx';
+import TagsDropItems from './TagsDropItems.jsx';
+import NewMemeModal from '../NewMemeModal.jsx';
 
-function BuildTagsDropItems() {
-  const { getData: tags, isGetPending: isPending, getError: error } = useGet('/api/tag/get-all');
-  return tags !== null && !isPending && error === null
-    ? (tags.map((tag, index) => (<Dropdown.Item key={index}>{tag}</Dropdown.Item>)))
-    : <>{error}</>
-}
-
-export const DefaultNavBar = () => {
+export const DefaultNavBar = ({ tagSetter }) => {
   const [loginModalShow, setLoginModalShow] = useState(false);
   const [signUpModalShow, setSignUpModalShow] = useState(false);
 
@@ -36,7 +30,7 @@ export const DefaultNavBar = () => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <BuildTagsDropItems />
+            <TagsDropItems tagSetter={(tag) => tagSetter(tag)} />
           </Dropdown.Menu>
         </Dropdown>
       </Container>
@@ -55,12 +49,13 @@ export const DefaultNavBar = () => {
     </Navbar>
     <LoginModal show={loginModalShow}
       onHide={() => setLoginModalShow(false)} />
-      <SignUpModal show={signUpModalShow}
+    <SignUpModal show={signUpModalShow}
       onHide={() => setSignUpModalShow(false)} />
   </>;
 };
 
-export const BaseUserNavBar = ({ user, onLogout }) => {
+export const BaseUserNavBar = ({ user, onLogout, tagSetter }) => {
+  const [newMemeModalShow, setNewMemeModalShow] = useState(false);
 
   return <>
     <Navbar bg="dark" variant="dark" sticky="top">
@@ -78,7 +73,7 @@ export const BaseUserNavBar = ({ user, onLogout }) => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <BuildTagsDropItems />
+            <TagsDropItems tagSetter={(tag) => tagSetter(tag)} />
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown>
@@ -89,6 +84,9 @@ export const BaseUserNavBar = ({ user, onLogout }) => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
+            <Dropdown.Item as={Button} onClick={() => setNewMemeModalShow(true)}>
+              New Meme
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Container>
@@ -100,10 +98,12 @@ export const BaseUserNavBar = ({ user, onLogout }) => {
         </Navbar.Brand>
       </Container>
     </Navbar>
+    <NewMemeModal show={newMemeModalShow}
+      onHide={() => setNewMemeModalShow(false)} />
   </>;
 };
 
-export const ModeratorNavBar = ({ user, onLogout }) => {
+export const ModeratorNavBar = ({ user, onLogout, tagSetter }) => {
   return <>
     <Navbar bg="dark" variant="dark" sticky="top">
       <Container fluid className="justify-content-start">
@@ -120,7 +120,7 @@ export const ModeratorNavBar = ({ user, onLogout }) => {
             </IconContext.Provider>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <BuildTagsDropItems />
+            <TagsDropItems tagSetter={(tag) => tagSetter(tag)} />
           </Dropdown.Menu>
         </Dropdown>
       </Container>

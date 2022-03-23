@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react';
 import { userContext } from '../../context/UserProvider';
 import Cookies from 'universal-cookie';
 
-const NavigationBarFrame = () => {
+const NavigationBarFrame = ({tagSetter}) => {
     const { user, setUser } = useContext(userContext);
 
 
@@ -20,13 +20,13 @@ const NavigationBarFrame = () => {
     const chooseBar = useCallback((role) => {
         switch (role) {
             case "baseUser":
-                return <BaseUserNavBar user={user} onLogout={() => onLogout()} />;
+                return <BaseUserNavBar user={user} tagSetter={(tag)=>tagSetter(tag)} onLogout={() => onLogout()} />;
             case "moderator":
-                return <ModeratorNavBar user={user} onLogout={() => onLogout()} />;
+                return <ModeratorNavBar user={user} tagSetter={(tag)=>tagSetter(tag)} onLogout={() => onLogout()} />;
             default:
-                return <DefaultNavBar />;
+                return <DefaultNavBar tagSetter={(tag)=>tagSetter(tag)}/>;
         }
-    }, [user, onLogout]);
+    }, [user, onLogout,tagSetter]);
 
     return <>
         {chooseBar(user?.role)}
