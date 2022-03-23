@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
 const useGet = (url, token='') => {
-    const [data, setData] = useState(null);
-    const [isPending, setIsPending] = useState(true);
-    const [error, setError] = useState(null);
+    const [getData, setGetData] = useState(null);
+    const [isGetPending, setIsGetPending] = useState(true);
+    const [getError, setGetError] = useState(null);
 
     useEffect(() => {
             fetch(url, {
@@ -18,15 +18,15 @@ const useGet = (url, token='') => {
                     return res.json();
                 })
                 .then(data =>{
-                    setData(data);
-                    setIsPending(false);
-                    setError(null);
+                    setGetData(data);
+                    setIsGetPending(false);
+                    setGetError(null);
                 })
                 .catch(err =>{
-                    setIsPending(false);
-                    setError(err.message);
+                    setIsGetPending(false);
+                    setGetError(err.message);
                 })
     }, [url,token]);
-    return {data,isPending,error};
+    return {getData,isGetPending,getError};
 }
 export default useGet;
