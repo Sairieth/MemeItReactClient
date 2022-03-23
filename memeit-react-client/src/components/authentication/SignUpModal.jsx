@@ -9,7 +9,7 @@ import jwt_decode from 'jwt-decode';
 
 const SignUpModal = (props) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { data: signUpData, request } = usePost('/api/auth/register');
+    const { data: signUpData, request } = usePost('/api/auth/register','application/json');
     const { setUser } = useContext(userContext)
     const onHide = props.onHide;
 
